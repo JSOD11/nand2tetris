@@ -1,0 +1,43 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/3/a/RAM8.hdl
+/**
+ * Memory of eight 16-bit registers.
+ * If load is asserted, the value of the register selected by
+ * address is set to in; Otherwise, the value does not change.
+ * The value of the selected register is emitted by out.
+ */
+CHIP RAM8 {
+    IN in[16], load, address[3];
+    OUT out[16];
+
+    PARTS:
+    
+    // Registers read from the output of their respective Mux below.
+    // All take the load bit and output to their respective wires.
+    Register(in=a2, load=load, out=a);
+    Register(in=b2, load=load, out=b);
+    Register(in=c2, load=load, out=c);
+    Register(in=d2, load=load, out=d);
+    Register(in=e2, load=load, out=e);
+    Register(in=f2, load=load, out=f);
+    Register(in=g2, load=load, out=g);
+    Register(in=h2, load=load, out=h);
+
+    // Project load bit to the relevant register index.
+    DMux8Way(in=load, sel=address, a=a1, b=b1, c=c1, d=d1, e=e1, f=f1, g=g1, h=h1);
+
+    // Set next register value with load bit selected above.
+    Mux16(a=a, b=in, sel=a1, out=a2);
+    Mux16(a=b, b=in, sel=b1, out=b2);
+    Mux16(a=c, b=in, sel=c1, out=c2);
+    Mux16(a=d, b=in, sel=d1, out=d2);
+    Mux16(a=e, b=in, sel=e1, out=e2);
+    Mux16(a=f, b=in, sel=f1, out=f2);
+    Mux16(a=g, b=in, sel=g1, out=g2);
+    Mux16(a=h, b=in, sel=h1, out=h2);
+    
+    // Read out the value of the selected register.
+    Mux8Way16(a=a, b=b, c=c, d=d, e=e, f=f, g=g, h=h, sel=address, out=out);
+}
