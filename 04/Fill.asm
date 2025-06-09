@@ -68,13 +68,13 @@
 
 (RENDER)
 
-    // If i > n, rendering is complete.
+    // If i == n, rendering is complete.
     @i
     D=M
     @n
     D=D-M
     @LOOP
-    D;JGT
+    D;JEQ
 
     // Set the current RAM register to the selected color.
     @color
@@ -86,9 +86,8 @@
     // Proceed to the next address.
     @i
     M=M+1
-    D=M
     @address
-    M=D+M
+    M=M+1
 
     // Continue rendering.
     @RENDER
@@ -101,3 +100,4 @@
 (END)
     @END
     0;JMP
+
